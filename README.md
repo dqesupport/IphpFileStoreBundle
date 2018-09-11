@@ -24,7 +24,7 @@ Add the following lines in your composer.json:
 ```
 {
     "require": {
-        "iphp/filestore-bundle" : "@stable" 
+        "dqe/filestore-bundle" : "@stable" 
     }
 }
 ```
@@ -291,7 +291,7 @@ more info about form customization here http://symfony.com/doc/current/form/form
 
 ### Method 2: Override bundle template
 
-To override the bundle template, just copy the field.html.twig template from the vendor/iphp/filestore-bundle/Iphp/FileStoreBundle/Resources/views/Form/fields.html.twig  to app/Resources/IphpFileStoreBundle/views/Form/fields.html.twig (the app/Resources/IphpFileStoreBundle directory won't exist, so you'll need to create it). You're now free to customize the template.
+To override the bundle template, just copy the field.html.twig template from the vendor/dqe/filestore-bundle/Iphp/FileStoreBundle/Resources/views/Form/fields.html.twig  to app/Resources/IphpFileStoreBundle/views/Form/fields.html.twig (the app/Resources/IphpFileStoreBundle directory won't exist, so you'll need to create it). You're now free to customize the template.
 
 for example, for display preview in all forms
 ``` twig

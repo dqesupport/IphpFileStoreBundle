@@ -1,5 +1,5 @@
 {
-    "name": "iphp/filestore-bundle",
+    "name": "dqe/filestore-bundle",
     "type": "bundle",
     "description": "Upload files for doctrine entities in symfony 2 project",
     "keywords": ["file upload", "sonata admin file upload", "upload", "symfony file upload"],
