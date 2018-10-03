@@ -14,12 +14,12 @@
 
     "require": {
         "php": "^5.5 || ^7.0",
-        "symfony/framework-bundle": "^2.8|^3.0"
+        "symfony/framework-bundle": "^2.8|^3.0|^4.0"
     },
 
     "require-dev": {
-        "symfony/form": "^2.8|^3.0",
-        "symfony/twig-bundle": "^2.8|^3.0",
+        "symfony/form": "^2.8|^3.0|^4.0",
+        "symfony/twig-bundle": "^2.8|^3.0|^4.0",
 
         "symfony/class-loader": "@stable",
         "symfony/finder": "@stable",
@@ -32,7 +32,8 @@
         "doctrine/doctrine-bundle": "@stable",
         "doctrine/orm": "@stable",
         "mikey179/vfsStream": "@stable",
-        "codeclimate/php-test-reporter": "dev-master"
+        "codeclimate/php-test-reporter": "dev-master",
+        "phpunit/phpunit": "~4.8"
     },
 
     "autoload": {
