@@ -65,6 +65,13 @@
             <tag name="doctrine.event_listener" event="preUpdate"/>
             <tag name="doctrine.event_listener" event="postRemove"/>
         </service>
+
+        <service id="iphp.filestore.command.repair" class="Iphp\FileStoreBundle\Command\RepairFileDataCommand">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="iphp.filestore.mapping.factory"/>
+            <argument>%kernel.project_dir%</argument>
+            <tag name="console.command"/>
+        </service>
     </services>
 
 </container>
