@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="./Tests/bootstrap.php" color="true">
+<phpunit bootstrap="./Tests/bootstrap.php" colors="true">
 
     <testsuites>
-        <testsuite name="IphpFileStoreBundle Test Suite">
+        <testsuite name="unit">
             <directory suffix="Test.php">./Tests</directory>
+            <exclude>./Tests/Functional</exclude>
+        </testsuite>
+        <testsuite name="functional">
+            <directory suffix="Test.php">./Tests/Functional</directory>
         </testsuite>
     </testsuites>
 
-    <filter>
-        <whitelist>
+    <coverage>
+        <include>
             <directory>./</directory>
-            <exclude>
-                <directory>./Resources</directory>
-                <directory>./Tests</directory>
-                <directory>./vendor</directory>
-            </exclude>
-        </whitelist>
-    </filter>
-
-    <logging>
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
-    </logging>
+        </include>
+        <exclude>
+            <directory>./Resources</directory>
+            <directory>./Tests</directory>
+            <directory>./vendor</directory>
+        </exclude>
+        <report>
+            <clover outputFile="build/logs/clover.xml"/>
+        </report>
+    </coverage>
 </phpunit>

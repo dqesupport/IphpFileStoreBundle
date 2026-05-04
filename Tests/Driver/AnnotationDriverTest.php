@@ -15,7 +15,7 @@ use Iphp\FileStoreBundle\Tests\TwoFieldsDummyEntity;
  *
  * @author Vitiko <vitiko@mail.ru>
  */
-class AnnotationDriverTest extends \PHPUnit_Framework_TestCase
+class AnnotationDriverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test that the driver can correctly read the Uploadable
@@ -26,7 +26,7 @@ class AnnotationDriverTest extends \PHPUnit_Framework_TestCase
         $uploadable = Mocks::getUploadableMock($this);
 
 
-        $reader = $this->getMock('Doctrine\Common\Annotations\Reader');
+        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
         $reader
             ->expects($this->once())
             ->method('getClassAnnotation')
@@ -43,7 +43,7 @@ class AnnotationDriverTest extends \PHPUnit_Framework_TestCase
     public function testReadUploadableAnnotationFromParent()
     {
         $uploadable = Mocks::getUploadableMock($this);
-        $reader = $this->getMock('Doctrine\Common\Annotations\Reader');
+        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
 
 
         $reader
@@ -78,7 +78,7 @@ class AnnotationDriverTest extends \PHPUnit_Framework_TestCase
      */
     public function testReadUploadableAnnotationReturnsNullWhenNonePresent()
     {
-        $reader = $this->getMock('Doctrine\Common\Annotations\Reader');
+        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
         $reader
             ->expects($this->once())
             ->method('getClassAnnotation')
@@ -106,7 +106,7 @@ class AnnotationDriverTest extends \PHPUnit_Framework_TestCase
         $entity = new DummyEntity();
         $class = new \ReflectionClass($entity);
 
-        $reader = $this->getMock('Doctrine\Common\Annotations\Reader');
+        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
         $reader
             ->expects($this->any())
             ->method('getPropertyAnnotation')
@@ -145,7 +145,7 @@ class AnnotationDriverTest extends \PHPUnit_Framework_TestCase
 
 
 
-        $reader = $this->getMock('Doctrine\Common\Annotations\Reader');
+        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
         $reader
             ->expects($this->any())
             ->method('getPropertyAnnotation')
@@ -179,7 +179,7 @@ class AnnotationDriverTest extends \PHPUnit_Framework_TestCase
         $entity = new DummyEntity();
         $class = new \ReflectionClass($entity);
 
-        $reader = $this->getMock('Doctrine\Common\Annotations\Reader');
+        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
         $reader
             ->expects($this->any())
             ->method('getPropertyAnnotation')
@@ -206,12 +206,12 @@ class AnnotationDriverTest extends \PHPUnit_Framework_TestCase
     public function testReadUploadableFieldNoMapping()
     {
         $uploadableField = Mocks::getUploadableFieldMock($this);
-        $uploadableField->expects($this->never())->method('setPropertyName');
+        $uploadableField->expects($this->never())->method('setFileUploadPropertyName');
 
         $entity = new DummyEntity();
         $class = new \ReflectionClass($entity);
 
-        $reader = $this->getMock('Doctrine\Common\Annotations\Reader');
+        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
         $reader
             ->expects($this->any())
             ->method('getPropertyAnnotation')
@@ -246,7 +246,7 @@ class AnnotationDriverTest extends \PHPUnit_Framework_TestCase
         $entity = new TwoFieldsDummyEntity();
         $class = new \ReflectionClass($entity);
 
-        $reader = $this->getMock('Doctrine\Common\Annotations\Reader');
+        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
         $reader
             ->expects($this->any())
             ->method('getPropertyAnnotation')
@@ -276,7 +276,7 @@ class AnnotationDriverTest extends \PHPUnit_Framework_TestCase
         $entity = new DummyEntity();
         $class = new \ReflectionClass($entity);
 
-        $reader = $this->getMock('Doctrine\Common\Annotations\Reader');
+        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
         $reader
             ->expects($this->any())
             ->method('getPropertyAnnotation')

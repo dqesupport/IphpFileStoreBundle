@@ -31,9 +31,9 @@
         "sensio/framework-extra-bundle": "@stable",
         "doctrine/doctrine-bundle": "@stable",
         "doctrine/orm": "@stable",
-        "mikey179/vfsStream": "@stable",
-        "codeclimate/php-test-reporter": "dev-master",
-        "phpunit/phpunit": "~4.8"
+        "mikey179/vfsstream": "@stable",
+        "phpunit/phpunit": "^9.5",
+        "symfony/mime": "^7.4"
     },
 
     "autoload": {

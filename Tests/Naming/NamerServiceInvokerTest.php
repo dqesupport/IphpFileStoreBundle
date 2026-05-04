@@ -4,7 +4,7 @@ namespace Iphp\FileStoreBundle\Tests\Naming;
 use Iphp\FileStoreBundle\Naming\NamerServiceInvoker;
 use Iphp\FileStoreBundle\Tests\Mocks;
 
-class NamerServiceInvokerTest extends \PHPUnit_Framework_TestCase
+class NamerServiceInvokerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Iphp\FileStoreBundle\Naming\NamerServiceInvoker
@@ -17,7 +17,7 @@ class NamerServiceInvokerTest extends \PHPUnit_Framework_TestCase
     protected $container;
 
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->container = Mocks::getContainerMock($this);
         $this->invoker = new NamerServiceInvoker ($this->container);

@@ -5,7 +5,7 @@ namespace Iphp\FileStoreBundle\Tests\Form\DataTransformer;
 use Iphp\FileStoreBundle\Form\DataTransformer\FileDataViewTransformer;
 use Iphp\FileStoreBundle\Tests\Mocks;
 
-class FileDataViewTransformerTest extends \PHPUnit_Framework_TestCase
+class FileDataViewTransformerTest extends \PHPUnit\Framework\TestCase
 {
 
 
@@ -16,7 +16,7 @@ class FileDataViewTransformerTest extends \PHPUnit_Framework_TestCase
 
 
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->transformer = new  FileDataViewTransformer();
     }

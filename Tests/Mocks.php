@@ -15,7 +15,7 @@ class Mocks
      *
      * @return \Doctrine\Common\EventArgs EventArgs
      */
-    static function getEventArgsMock(\PHPUnit_Framework_TestCase $testCase)
+    static function getEventArgsMock(\PHPUnit\Framework\TestCase $testCase)
     {
         return $testCase->getMockBuilder('Doctrine\Common\EventArgs')
             ->disableOriginalConstructor()
@@ -23,7 +23,7 @@ class Mocks
     }
 
 
-    static function getContainerMock(\PHPUnit_Framework_TestCase $testCase)
+    static function getContainerMock(\PHPUnit\Framework\TestCase $testCase)
     {
         return $testCase->getMockBuilder('Symfony\Component\DependencyInjection\ContainerInterface')
             ->disableOriginalConstructor()
@@ -36,7 +36,7 @@ class Mocks
      *
      * @return \Iphp\FileStoreBundle\Mapping\Annotation\Uploadable Uploadable
      */
-    static function getUploadableMock(\PHPUnit_Framework_TestCase $testCase)
+    static function getUploadableMock(\PHPUnit\Framework\TestCase $testCase)
     {
         return $testCase->getMockBuilder('Iphp\FileStoreBundle\Mapping\Annotation\Uploadable')
             ->disableOriginalConstructor()
@@ -49,7 +49,7 @@ class Mocks
      *
      * @return \Iphp\FileStoreBundle\Mapping\Annotation\UploadableField UploadableField
      */
-    static function getUploadableFieldMock(\PHPUnit_Framework_TestCase $testCase)
+    static function getUploadableFieldMock(\PHPUnit\Framework\TestCase $testCase)
     {
         return $testCase->getMockBuilder('Iphp\FileStoreBundle\Mapping\Annotation\UploadableField')
             ->disableOriginalConstructor()
@@ -61,7 +61,7 @@ class Mocks
      *
      * @return \Iphp\FileStoreBundle\Mapping\PropertyMapping  UploadableField
      */
-    static function getPropertyMappingMock(\PHPUnit_Framework_TestCase $testCase)
+    static function getPropertyMappingMock(\PHPUnit\Framework\TestCase $testCase)
     {
         return $testCase->getMockBuilder('Iphp\FileStoreBundle\Mapping\PropertyMapping')
             ->disableOriginalConstructor()
@@ -74,7 +74,7 @@ class Mocks
      *
      * @return \Iphp\FileStoreBundle\Driver\AnnotationDriver The driver.
      */
-    static function getAnnotationDriverMock(\PHPUnit_Framework_TestCase $testCase)
+    static function getAnnotationDriverMock(\PHPUnit\Framework\TestCase $testCase)
     {
         return $testCase->getMockBuilder('Iphp\FileStoreBundle\Driver\AnnotationDriver')
             ->disableOriginalConstructor()
@@ -87,7 +87,7 @@ class Mocks
      *
      * @return \Iphp\FileStoreBundle\Naming\NamerServiceInvoker mock namer service invoker
      */
-    static function getNamerServiceInvokerMock(\PHPUnit_Framework_TestCase $testCase)
+    static function getNamerServiceInvokerMock(\PHPUnit\Framework\TestCase $testCase)
     {
         return $testCase->getMockBuilder('Iphp\FileStoreBundle\Naming\NamerServiceInvoker')
             ->disableOriginalConstructor()
@@ -99,7 +99,7 @@ class Mocks
      *
      * @return \Iphp\FileStoreBundle\DataStorage\DataStorageInterface The mock data storage
      */
-    static function getDataStorageMock(\PHPUnit_Framework_TestCase $testCase)
+    static function getDataStorageMock(\PHPUnit\Framework\TestCase $testCase)
     {
         return $testCase->getMockBuilder('Iphp\FileStoreBundle\DataStorage\DataStorageInterface')
             ->disableOriginalConstructor()
@@ -112,7 +112,7 @@ class Mocks
      *
      * @return \Iphp\FileStoreBundle\FileStorage\FileStorageInterface mock file storage
      */
-    static function getFileStorageMock(\PHPUnit_Framework_TestCase $testCase)
+    static function getFileStorageMock(\PHPUnit\Framework\TestCase $testCase)
     {
         return $testCase->getMockBuilder('Iphp\FileStoreBundle\FileStorage\FileStorageInterface')
             ->disableOriginalConstructor()
@@ -125,7 +125,7 @@ class Mocks
      *
      * @return \Iphp\FileStoreBundle\Mapping\PropertyMappingFactory The factory.
      */
-    static function getPropertyMappingFactoryMock(\PHPUnit_Framework_TestCase $testCase,
+    static function getPropertyMappingFactoryMock(\PHPUnit\Framework\TestCase $testCase,
                                                   NamerServiceInvoker $namerServiceInvoker,
                                                   AnnotationDriver $driver,
                                                   $mappingsConfig = array())
@@ -141,10 +141,10 @@ class Mocks
      *
      * @return \Symfony\Component\HttpFoundation\File\File The file.
      */
-    static function getFileMock(\PHPUnit_Framework_TestCase $testCase)
+    static function getFileMock(\PHPUnit\Framework\TestCase $testCase)
     {
         return $testCase->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
-            ->setConstructorArgs(array(null, false))
+            ->disableOriginalConstructor()
             ->getMock();
     }
 
@@ -154,7 +154,7 @@ class Mocks
      *
      * @return \Symfony\Component\HttpFoundation\File\UploadedFile uploaded file
      */
-    static function getUploadedFileMock(\PHPUnit_Framework_TestCase $testCase)
+    static function getUploadedFileMock(\PHPUnit\Framework\TestCase $testCase)
     {
         return $testCase->getMockBuilder('Symfony\Component\HttpFoundation\File\UploadedFile')
             ->disableOriginalConstructor()
@@ -167,10 +167,10 @@ class Mocks
      *
      * @return \Iphp\FileStoreBundle\File\File The file.
      */
-    static function getIphpFileMock(\PHPUnit_Framework_TestCase $testCase)
+    static function getIphpFileMock(\PHPUnit\Framework\TestCase $testCase)
     {
         return $testCase->getMockBuilder('Iphp\FileStoreBundle\File\File')
-            ->setConstructorArgs(array(null, false))
+            ->disableOriginalConstructor()
             ->getMock();
     }
 

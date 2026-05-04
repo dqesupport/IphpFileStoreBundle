@@ -16,7 +16,7 @@ use Iphp\FileStoreBundle\Mapping\PropertyMappingFactory;
  *
  * @author Vitiko <vitiko@mail.ru>
  */
-class UploaderListenerTest extends \PHPUnit_Framework_TestCase
+class UploaderListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Iphp\FileStoreBundle\DataStorage\DataStorageInterface $dataStorage
@@ -47,7 +47,7 @@ class UploaderListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * Sets up the test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->dataStorage = Mocks::getDataStorageMock($this);
         $this->driver = Mocks::getAnnotationDriverMock($this);

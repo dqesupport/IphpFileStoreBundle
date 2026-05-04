@@ -9,23 +9,21 @@ use Iphp\FileStoreBundle\Mapping\Annotation\UploadableField;
  *
  * @author Vitiko <vitiko@mail.ru>
  */
-class UploadableFieldTest extends \PHPUnit_Framework_TestCase
+class UploadableFieldTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Iphp\FileStoreBundle\Mapping\Annotation\UploadableField;
      */
     protected $uploadableField;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->uploadableField = new UploadableField(array('mapping' => 'dummy_file'));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testExceptionThrownWhenNoMappingAttribute()
     {
+        $this->expectException(\InvalidArgumentException::class);
         new UploadableField(array(
             'fileNameProperty' => 'fileName'
         ));

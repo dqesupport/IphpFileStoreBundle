@@ -23,7 +23,7 @@ class File extends UploadedFile
                                   $size = null, $error = null, $test = false)
     {
        if ($path !== null)
-           parent::__construct($path, $originalName, $mimeType,$size, $error, $test);
+           parent::__construct($path, $originalName, $mimeType, $error, $test);
     }
 
 
@@ -40,7 +40,7 @@ class File extends UploadedFile
     }
 
 
-    function isValid()
+    function isValid(): bool
     {
         return true;
     }

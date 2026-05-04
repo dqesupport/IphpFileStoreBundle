@@ -6,7 +6,7 @@ use Iphp\FileStoreBundle\Mapping\PropertyMapping;
 use Iphp\FileStoreBundle\Tests\DummyEntitySeparateDataField;
 use Iphp\FileStoreBundle\Tests\Mocks;
 
-class PropertyMappingTest extends \PHPUnit_Framework_TestCase
+class PropertyMappingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Iphp\FileStoreBundle\Mapping\PropertyMapping
@@ -23,7 +23,7 @@ class PropertyMappingTest extends \PHPUnit_Framework_TestCase
     /**
      * Sets up the test.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->namerServiceInvoker = Mocks::getNamerServiceInvokerMock($this);
         $this->fileStorage = Mocks::getFileStorageMock($this);
@@ -177,10 +177,10 @@ class PropertyMappingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Not resolved collision
-     * @expectedException \Exception
      */
     public function testPrepareFileNameWithoutResolveCollision()
     {
+        $this->expectException(\Exception::class);
         $propertyMapping = $this->getPropertyMapping(new DummyEntity());
 
         //service iphp.filestore.namer.default, method translit  will invoke once,
@@ -216,10 +216,10 @@ class PropertyMappingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Exception about need namer for resolving collisions
-     * @expectedException \Exception
      */
     function testResolveFileCollisionNoNamer()
     {
+        $this->expectException(\Exception::class);
         $propertyMapping = $this->getPropertyMapping(new DummyEntity(), array('namer' => null));
 
         $this->namerServiceInvoker->expects($this->never())->method('rename');

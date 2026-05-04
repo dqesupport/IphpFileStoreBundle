@@ -25,7 +25,7 @@ class BaseTestCase extends WebTestCase
         return end($class);
 
     }
-    protected function setUp()
+    protected function setUp(): void
     {
         $dir = AppKernel::getTestBaseDir().'/'.static::getTestEnvFromCalledClass();
         $fs = new Filesystem();
@@ -37,14 +37,9 @@ class BaseTestCase extends WebTestCase
         return self::$kernel;
     }
 
-    protected function getContainer()
-    {
-        return $this->getKernel()->getContainer();
-    }
-
     protected function getEntityManager()
     {
-        return $this->getContainer()->get('doctrine.orm.entity_manager');
+        return static::getContainer()->get('doctrine.orm.entity_manager');
     }
 
 

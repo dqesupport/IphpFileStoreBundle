@@ -7,7 +7,7 @@ use Iphp\FileStoreBundle\Form\Type\FileTypeBindSubscriber;
 use Iphp\FileStoreBundle\Tests\DummyEntitySeparateDataField;
 use Iphp\FileStoreBundle\Tests\Mocks;
 
-class FileTypeBindSubscriberTest extends \PHPUnit_Framework_TestCase
+class FileTypeBindSubscriberTest extends \PHPUnit\Framework\TestCase
 {
 
 
@@ -46,7 +46,7 @@ class FileTypeBindSubscriberTest extends \PHPUnit_Framework_TestCase
     protected $transformer;
 
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->dataStorage = Mocks::getDataStorageMock($this);
         $this->driver = Mocks::getAnnotationDriverMock($this);

@@ -11,7 +11,7 @@ use Iphp\FileStoreBundle\Tests\Mocks;
  *
  * @author Vitiko <vitiko@mail.ru>
  */
-class PropertyMappingFactoryTest extends \PHPUnit_Framework_TestCase
+class PropertyMappingFactoryTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -29,7 +29,7 @@ class PropertyMappingFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Sets up the test.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->driver = Mocks::getAnnotationDriverMock($this);
         $this->namerServiceInvoker = Mocks::getNamerServiceInvokerMock($this);
@@ -125,11 +125,10 @@ class PropertyMappingFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Test that an exception is thrown when an invalid mapping name
      * is specified.
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testThrowsExceptionOnInvalidMappingName()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $obj = new DummyEntity();
         $class = new \ReflectionClass($obj);
 

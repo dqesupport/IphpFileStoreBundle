@@ -5,7 +5,7 @@ namespace Iphp\FileStoreBundle\Tests\Form\DataTransformer;
 use Iphp\FileStoreBundle\Form\DataTransformer\FileDataTransformer;
 use Iphp\FileStoreBundle\Tests\Mocks;
 
-class FileDataTransformerTest extends \PHPUnit_Framework_TestCase
+class FileDataTransformerTest extends \PHPUnit\Framework\TestCase
 {
 
 
@@ -19,7 +19,7 @@ class FileDataTransformerTest extends \PHPUnit_Framework_TestCase
      */
     protected $fileStorage;
 
-    public function setUp()
+    public function setUp(): void
     {
 
         $this->fileStorage = Mocks::getFileStorageMock($this);

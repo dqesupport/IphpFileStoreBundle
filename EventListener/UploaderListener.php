@@ -198,7 +198,7 @@ class UploaderListener implements EventSubscriber
                     if ($this->fileStorage->fileExists($fileNameByWebDir)) {
                         $uploadedFile = new UploadedFile ($fileNameByWebDir,
                             $currentFileData['originalName'], $currentFileData['mimeType'],
-                            null, null, true);
+                            null, true);
                         $fileData = $this->fileStorage->upload($mapping, $uploadedFile);
                         $mapping->setFileDataPropertyValue($fileData);
                     }

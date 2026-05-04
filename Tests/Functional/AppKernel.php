@@ -32,7 +32,7 @@ class AppKernel extends Kernel
         $this->testEnv = $testEnv;
     }
 
-    public function registerBundles()
+    public function registerBundles(): iterable
     {
         return array(
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
@@ -50,7 +50,7 @@ class AppKernel extends Kernel
         $loader->load($this->config);
     }
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return $this->getTestEnvDir() . '/app/cache/' . substr(md5($this->config), 0, 3) . '';
     }
@@ -82,7 +82,7 @@ class AppKernel extends Kernel
     }
 
 
-    protected function getKernelParameters()
+    protected function getKernelParameters(): array
     {
 
 

@@ -112,7 +112,7 @@ class RepairFileDataCommand extends ContainerAwareCommand
 
             //uploadedFile because need to move to new destination (not copy)
             $file = new UploadedFile ($fileNameByWebPathExists ? $fileNameByWebPath : $resolvedFileNameExists,
-                $fileData['originalName'], $fileData['mimeType'], null, null, true);
+                $fileData['originalName'], $fileData['mimeType'], null, true);
 
             $entity->{'set' . ucfirst($field)} ($file);
 

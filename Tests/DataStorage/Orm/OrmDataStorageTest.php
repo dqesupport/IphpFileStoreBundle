@@ -11,7 +11,7 @@ use Iphp\FileStoreBundle\DataStorage\OrmDataStorage;
  *
  * @author Vitiko <vitiko@mail.ru>
  */
-class OrmDataStorageTest extends \PHPUnit_Framework_TestCase
+class OrmDataStorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the getObjectFromArgs method.
@@ -21,7 +21,7 @@ class OrmDataStorageTest extends \PHPUnit_Framework_TestCase
         if (!class_exists('Doctrine\ORM\Event\LifecycleEventArgs')) {
             $this->markTestSkipped('Doctrine\ORM\Event\LifecycleEventArgs does not exist.');
         } else {
-            $entity = $this->getMock('Iphp\FileStoreBundle\Tests\DummyEntity');
+            $entity = $this->createMock('Iphp\FileStoreBundle\Tests\DummyEntity');
 
             $args = $this->getMockBuilder('Doctrine\ORM\Event\LifecycleEventArgs')
                 ->disableOriginalConstructor()
@@ -77,7 +77,7 @@ class OrmDataStorageTest extends \PHPUnit_Framework_TestCase
         if (!class_exists('Doctrine\ORM\Event\LifecycleEventArgs')) {
             $this->markTestSkipped('Doctrine\ORM\Event\LifecycleEventArgs does not exist.');
         } else {
-            $entity = $this->getMock('Iphp\FileStoreBundle\Tests\DummyEntity');
+            $entity = $this->createMock('Iphp\FileStoreBundle\Tests\DummyEntity');
 
             $args = $this->getMockBuilder('Doctrine\ORM\Event\LifecycleEventArgs')
                 ->disableOriginalConstructor()
@@ -132,7 +132,7 @@ class OrmDataStorageTest extends \PHPUnit_Framework_TestCase
         if (!class_exists('Doctrine\ORM\Event\LifecycleEventArgs')) {
             $this->markTestSkipped('Doctrine\ORM\Event\LifecycleEventArgs does not exist.');
         } else {
-            $entity = $this->getMock('Iphp\FileStoreBundle\Tests\DummyEntity');
+            $entity = $this->createMock('Iphp\FileStoreBundle\Tests\DummyEntity');
 
             $args = $this->getMockBuilder('Doctrine\ORM\Event\LifecycleEventArgs')
                 ->disableOriginalConstructor()
@@ -165,7 +165,7 @@ class OrmDataStorageTest extends \PHPUnit_Framework_TestCase
         if (!class_exists('Doctrine\ORM\Event\LifecycleEventArgs')) {
             $this->markTestSkipped('Doctrine\ORM\Event\PreUpdateEventArgs does not exist.');
         } else {
-            $entity = $this->getMock('Iphp\FileStoreBundle\Tests\DummyEntity');
+            $entity = $this->createMock('Iphp\FileStoreBundle\Tests\DummyEntity');
 
             $args = $this->getMockBuilder('Doctrine\ORM\Event\PreUpdateEventArgs')
                 ->disableOriginalConstructor()
