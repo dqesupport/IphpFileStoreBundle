@@ -4,68 +4,53 @@ namespace Iphp\FileStoreBundle\Tests\Mapping\Annotation;
 
 use Iphp\FileStoreBundle\Mapping\Annotation\UploadableField;
 
-/**
- * UploadableFieldTest.
- *
- * @author Vitiko <vitiko@mail.ru>
- */
 class UploadableFieldTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Iphp\FileStoreBundle\Mapping\Annotation\UploadableField;
-     */
-    protected $uploadableField;
+    private UploadableField $uploadableField;
 
     public function setUp(): void
     {
-        $this->uploadableField = new UploadableField(array('mapping' => 'dummy_file'));
+        $this->uploadableField = new UploadableField(mapping: 'dummy_file');
     }
 
-    public function testExceptionThrownWhenNoMappingAttribute()
+    public function testExceptionThrownWhenNoMappingAttribute(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        new UploadableField(array(
-            'fileNameProperty' => 'fileName'
-        ));
+        $this->expectException(\ArgumentCountError::class);
+        new UploadableField();
     }
 
-
-    public function testGetMapping()
+    public function testGetMapping(): void
     {
-
-        $this->assertSame($this->uploadableField->getMapping(), 'dummy_file');
+        $this->assertSame('dummy_file', $this->uploadableField->getMapping());
     }
 
-
-    public function testSetMapping()
+    public function testSetMapping(): void
     {
-        $this->uploadableField->setMapping('dummy_file');
-        $this->assertSame($this->uploadableField->getMapping(), 'dummy_file');
+        $this->uploadableField->setMapping('other');
+        $this->assertSame('other', $this->uploadableField->getMapping());
     }
 
-
-    public function testGetSetFileUploadPropertyName()
+    public function testGetSetFileUploadPropertyName(): void
     {
         $this->uploadableField->setFileUploadPropertyName('file');
-        $this->assertSame($this->uploadableField->getFileUploadPropertyName(), 'file');
-        $this->assertSame($this->uploadableField->getFileDataPropertyName(), 'file');
-
+        $this->assertSame('file', $this->uploadableField->getFileUploadPropertyName());
+        $this->assertSame('file', $this->uploadableField->getFileDataPropertyName());
     }
 
-
-
-
-    public function testGetSetFileDataPropertyName()
+    public function testGetSetFileDataPropertyName(): void
     {
         $this->uploadableField->setFileUploadPropertyName('file');
         $this->uploadableField->setFileDataPropertyName('file_data');
 
-        $this->assertSame($this->uploadableField->getFileUploadPropertyName(), 'file');
-        $this->assertSame($this->uploadableField->getFileDataPropertyName(), 'file_data');
+        $this->assertSame('file', $this->uploadableField->getFileUploadPropertyName());
+        $this->assertSame('file_data', $this->uploadableField->getFileDataPropertyName());
     }
 
+    public function testFileDataPropertyFromConstructor(): void
+    {
+        $field = new UploadableField(mapping: 'dummy_file', fileDataProperty: 'file_data');
+        $field->setFileUploadPropertyName('file');
 
-
-
-
+        $this->assertSame('file_data', $field->getFileDataPropertyName());
+    }
 }

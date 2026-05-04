@@ -3,289 +3,97 @@
 namespace Iphp\FileStoreBundle\Tests\Driver;
 
 use Iphp\FileStoreBundle\Driver\AnnotationDriver;
-use Iphp\FileStoreBundle\Tests\ChildOfDummyEntity;
-use Iphp\FileStoreBundle\Tests\Mocks;
 use Iphp\FileStoreBundle\Mapping\Annotation\Uploadable;
 use Iphp\FileStoreBundle\Mapping\Annotation\UploadableField;
+use Iphp\FileStoreBundle\Tests\ChildOfDummyEntity;
 use Iphp\FileStoreBundle\Tests\DummyEntity;
 use Iphp\FileStoreBundle\Tests\TwoFieldsDummyEntity;
 
-/**
- * AnnotationDriverTest.
- *
- * @author Vitiko <vitiko@mail.ru>
- */
 class AnnotationDriverTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * Test that the driver can correctly read the Uploadable
-     * annotation.
-     */
-    public function testReadUploadableAnnotation()
+    private AnnotationDriver $driver;
+
+    protected function setUp(): void
     {
-        $uploadable = Mocks::getUploadableMock($this);
-
-
-        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
-        $reader
-            ->expects($this->once())
-            ->method('getClassAnnotation')
-            ->will($this->returnValue($uploadable));
-
-        $entity = new DummyEntity();
-        $driver = new AnnotationDriver($reader);
-        $annot = $driver->readUploadable(new \ReflectionClass($entity));
-
-        $this->assertEquals($uploadable, $annot);
+        $this->driver = new AnnotationDriver();
     }
 
-
-    public function testReadUploadableAnnotationFromParent()
+    public function testReadUploadableAnnotation(): void
     {
-        $uploadable = Mocks::getUploadableMock($this);
-        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
+        $annot = $this->driver->readUploadable(new \ReflectionClass(DummyEntity::class));
 
-
-        $reader
-            ->expects($this->any())
-            ->method('getClassAnnotation')
-            ->will($this->returnCallBack ( function() use ( $uploadable) {
-
-            $args = func_get_args();
-
-            if ('Iphp\\FileStoreBundle\\Tests\\ChildOfDummyEntity' === $args[0]->getName()) return null;
-            if ('Iphp\\FileStoreBundle\\Tests\\DummyEntity' === $args[0]->getName()) return $uploadable;
-
-        }));
-
-        $entity = new ChildOfDummyEntity();
-        $driver = new AnnotationDriver($reader);
-
-        $annot = $driver->readUploadable(new \ReflectionClass($entity));
-
-        $this->assertEquals($uploadable, $annot);
-
+        $this->assertInstanceOf(Uploadable::class, $annot);
     }
 
-
-
-
-
-
-    /**
-     * Tests that the driver returns null when no Uploadable annotation
-     * is found.
-     */
-    public function testReadUploadableAnnotationReturnsNullWhenNonePresent()
+    public function testReadUploadableAnnotationFromParent(): void
     {
-        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
-        $reader
-            ->expects($this->once())
-            ->method('getClassAnnotation')
-            ->will($this->returnValue(null));
+        $annot = $this->driver->readUploadable(new \ReflectionClass(ChildOfDummyEntity::class));
 
-        $entity = new DummyEntity();
-        $driver = new AnnotationDriver($reader);
-        $annot = $driver->readUploadable(new \ReflectionClass($entity));
-
-        $this->assertEquals(null, $annot);
+        $this->assertInstanceOf(Uploadable::class, $annot);
     }
 
-    /**
-     * Tests that the driver correctly reads one UploadableField
-     * property.
-     */
-    public function testReadOneUploadableField()
+    public function testReadUploadableAnnotationReturnsNullWhenNonePresent(): void
     {
-        $uploadableField = Mocks::getUploadableFieldMock($this);
+        $annot = $this->driver->readUploadable(new \ReflectionClass(\stdClass::class));
 
-        $uploadableField
-            ->expects($this->once())
-            ->method('setFileUploadPropertyName');
-
-        $entity = new DummyEntity();
-        $class = new \ReflectionClass($entity);
-
-        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
-        $reader
-            ->expects($this->any())
-            ->method('getPropertyAnnotation')
-            ->will($this->returnCallback(function() use ($class, $uploadableField) {
-            $args = func_get_args();
-
-            if ( $args[0]->class === $class->getName() && 'file' === $args[0]->getName()) {
-                return $uploadableField;
-            }
-
-            return null;
-        }));
-
-        $driver = new AnnotationDriver($reader);
-        $fields = $driver->readUploadableFields($class);
-
-        $this->assertEquals(1, count($fields));
+        $this->assertNull($annot);
     }
 
-
-
-
-    public function testReadOneUploadableFieldFromParent()
+    public function testReadOneUploadableField(): void
     {
-        $uploadableField = Mocks::getUploadableFieldMock($this);
-        $uploadableField
-            ->expects($this->once())
-            ->method('setFileUploadPropertyName')
-            ->with ('file');
+        $fields = $this->driver->readUploadableFields(new \ReflectionClass(DummyEntity::class));
 
-
-        $entity = new ChildOfDummyEntity();
-        $class = new \ReflectionClass($entity);
-
-
-
-
-
-        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
-        $reader
-            ->expects($this->any())
-            ->method('getPropertyAnnotation')
-            ->will($this->returnCallback(function() use (   $entity , $uploadableField) {
-            $args = func_get_args();
-            if (get_parent_class($entity) === $args[0]->class && 'file' === $args[0]->getName()) {
-                return $uploadableField;
-            }
-
-            return null;
-        }));
-
-
-        $driver = new AnnotationDriver($reader);
-        $fields = $driver->readUploadableFields($class);
-
-        $this->assertEquals(1, count($fields));
+        $this->assertCount(1, $fields);
+        $this->assertInstanceOf(UploadableField::class, $fields[0]);
+        $this->assertSame('file', $fields[0]->getFileUploadPropertyName());
+        $this->assertSame('dummy_file', $fields[0]->getMapping());
     }
 
-
-
-    /**
-     * Tests that the driver correctly reads one UploadableField
-     * property.
-     */
-    public function testReadUploadableFieldSingle()
+    public function testReadOneUploadableFieldFromParent(): void
     {
-        $uploadableField = Mocks::getUploadableFieldMock($this);
-        $uploadableField->expects($this->once())->method('setFileUploadPropertyName');
+        $fields = $this->driver->readUploadableFields(new \ReflectionClass(ChildOfDummyEntity::class));
 
-        $entity = new DummyEntity();
-        $class = new \ReflectionClass($entity);
-
-        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
-        $reader
-            ->expects($this->any())
-            ->method('getPropertyAnnotation')
-            ->will($this->returnCallback(function() use ($uploadableField) {
-            $args = func_get_args();
-            if ('file' === $args[0]->getName()) {
-                return $uploadableField;
-            }
-
-            return null;
-        }));
-
-        $driver = new AnnotationDriver($reader);
-        $this->assertEquals ($driver->readUploadableField($class, 'file'), $uploadableField);
-
-
+        $this->assertCount(1, $fields);
+        $this->assertSame('file', $fields[0]->getFileUploadPropertyName());
     }
 
-
-    /**
-     * Tests that the driver correctly reads one UploadableField
-     * property.
-     */
-    public function testReadUploadableFieldNoMapping()
+    public function testReadUploadableFieldSingle(): void
     {
-        $uploadableField = Mocks::getUploadableFieldMock($this);
-        $uploadableField->expects($this->never())->method('setFileUploadPropertyName');
+        $field = $this->driver->readUploadableField(new \ReflectionClass(DummyEntity::class), 'file');
 
-        $entity = new DummyEntity();
-        $class = new \ReflectionClass($entity);
-
-        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
-        $reader
-            ->expects($this->any())
-            ->method('getPropertyAnnotation')
-            ->will($this->returnCallback(function() use ($uploadableField) {
-            $args = func_get_args();
-            if ('file' === $args[0]->getName()) {
-                return null;
-            }
-            return null;
-        }));
-
-        $driver = new AnnotationDriver($reader);
-        $this->assertEquals ($driver->readUploadableField($class, 'file'), null);
+        $this->assertInstanceOf(UploadableField::class, $field);
+        $this->assertSame('file', $field->getFileUploadPropertyName());
+        $this->assertSame('dummy_file', $field->getMapping());
     }
 
-
- 
-
-
-    /**
-     * Test that the driver correctly reads two UploadableField
-     * properties.
-     */
-    public function testReadTwoUploadableFields()
+    public function testReadUploadableFieldNoMapping(): void
     {
-        $fileField = Mocks::getUploadableFieldMock($this);
-        $fileField->expects($this->once())->method('setFileUploadPropertyName');
+        $field = $this->driver->readUploadableField(new \ReflectionClass(DummyEntity::class), 'title');
 
-        $imageField = Mocks::getUploadableFieldMock($this);
-        $imageField->expects($this->once())->method('setFileUploadPropertyName');
-
-        $entity = new TwoFieldsDummyEntity();
-        $class = new \ReflectionClass($entity);
-
-        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
-        $reader
-            ->expects($this->any())
-            ->method('getPropertyAnnotation')
-            ->will($this->returnCallback(function() use ($fileField, $imageField) {
-            $args = func_get_args();
-            if ('file' === $args[0]->getName()) {
-                return $fileField;
-            } elseif ('image' === $args[0]->getName()) {
-                return $imageField;
-            }
-
-            return null;
-        }));
-
-        $driver = new AnnotationDriver($reader);
-        $fields = $driver->readUploadableFields($class);
-
-        $this->assertEquals(2, count($fields));
+        $this->assertNull($field);
     }
 
-    /**
-     * Test that the driver reads zero UploadableField
-     * properties when none exist.
-     */
-    public function testReadNoUploadableFieldsWhenNoneExist()
+    public function testReadUploadableFieldOnMissingProperty(): void
     {
-        $entity = new DummyEntity();
-        $class = new \ReflectionClass($entity);
+        $field = $this->driver->readUploadableField(new \ReflectionClass(DummyEntity::class), 'doesNotExist');
 
-        $reader = $this->createMock('Doctrine\Common\Annotations\Reader');
-        $reader
-            ->expects($this->any())
-            ->method('getPropertyAnnotation')
-            ->will($this->returnValue(null));
-
-        $driver = new AnnotationDriver($reader);
-        $fields = $driver->readUploadableFields($class);
-
-        $this->assertEquals(0, count($fields));
+        $this->assertNull($field);
     }
 
+    public function testReadTwoUploadableFields(): void
+    {
+        $fields = $this->driver->readUploadableFields(new \ReflectionClass(TwoFieldsDummyEntity::class));
+
+        $this->assertCount(2, $fields);
+        $names = array_map(fn(UploadableField $f) => $f->getFileUploadPropertyName(), $fields);
+        $this->assertContains('file', $names);
+        $this->assertContains('image', $names);
+    }
+
+    public function testReadNoUploadableFieldsWhenNoneExist(): void
+    {
+        $fields = $this->driver->readUploadableFields(new \ReflectionClass(\stdClass::class));
+
+        $this->assertSame([], $fields);
+    }
 }

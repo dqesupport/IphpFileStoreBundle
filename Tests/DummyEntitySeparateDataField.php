@@ -2,21 +2,14 @@
 
 namespace Iphp\FileStoreBundle\Tests;
 
-use Iphp\FileStoreBundle\Mapping\Annotation as FileStore;
+use Iphp\FileStoreBundle\Mapping\Annotation\Uploadable;
+use Iphp\FileStoreBundle\Mapping\Annotation\UploadableField;
 
-/**
- * @FileStore\Uploadable
- *
- * @author Vitiko <vitiko@mail.ru>
- */
+#[Uploadable]
 class DummyEntitySeparateDataField
 {
-    /**
-     * @FileStore\UploadableField(mapping="dummy_file",  )
-     */
+    #[UploadableField(mapping: 'dummy_file')]
     protected $file;
-
-
 
     protected $file_data;
 

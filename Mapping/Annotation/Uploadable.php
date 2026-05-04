@@ -2,14 +2,7 @@
 
 namespace Iphp\FileStoreBundle\Mapping\Annotation;
 
-/**
- * Uploadable.
- *
- * @Annotation
- *
- * @author Vitiko <vitiko@mail.ru>
- */
+#[\Attribute(\Attribute::TARGET_CLASS)]
 class Uploadable
 {
-
 }

@@ -2,104 +2,47 @@
 
 namespace Iphp\FileStoreBundle\Mapping\Annotation;
 
-/**
- * UploadableField.
- *
- * @Annotation
- *
- * @author Vitiko <vitiko@mail.ru>
- */
+#[\Attribute(\Attribute::TARGET_PROPERTY)]
 class UploadableField
 {
-    /**
-     * @var string $mapping
-     */
-    protected $mapping;
+    private string $mapping;
 
-    /**
-     * @var string $name
-     */
-    protected $fileUploadPropertyName;
+    private ?string $fileUploadPropertyName = null;
 
-    /**
-     * @var string $fileNameProperty
-     */
-    protected $fileDataPropertyName;
+    private ?string $fileDataPropertyName;
 
-    /**
-     * Constructs a new instance of UploadableField.
-     *
-     * @param array $options The options.
-     */
-    public function __construct(array $options)
+    public function __construct(string $mapping, ?string $fileDataProperty = null)
     {
-        if (isset($options['mapping'])) {
-            $this->mapping = $options['mapping'];
-        } else {
-            throw new \InvalidArgumentException('The "mapping" attribute of UploadableField is required.');
-        }
-        if (isset($options['fileDataProperty']))
-        {
-            $this->setFileDataPropertyName($options['fileDataProperty']);
-        }
+        $this->mapping = $mapping;
+        $this->fileDataPropertyName = $fileDataProperty;
     }
 
-    /**
-     * Gets the mapping name.
-     *
-     * @return string The mapping name.
-     */
-    public function getMapping()
+    public function getMapping(): string
     {
         return $this->mapping;
     }
 
-    /**
-     * Sets the mapping name.
-     *
-     * @param $mapping The mapping name.
-     */
-    public function setMapping($mapping)
+    public function setMapping(string $mapping): void
     {
         $this->mapping = $mapping;
     }
 
-    /**
-     * Gets the property name.
-     *
-     * @return string The property name.
-     */
-    public function getFileUploadPropertyName()
+    public function getFileUploadPropertyName(): ?string
     {
         return $this->fileUploadPropertyName;
     }
 
-    /**
-     * Sets the property name.
-     *
-     * @param $propertyName The property name.
-     */
-    public function setFileUploadPropertyName($propertyName)
+    public function setFileUploadPropertyName(string $propertyName): void
     {
         $this->fileUploadPropertyName = $propertyName;
     }
 
-    /**
-     * Gets the file name property.
-     * By default using propertyName
-     * @return string The file name property.
-     */
-    public function getFileDataPropertyName()
+    public function getFileDataPropertyName(): ?string
     {
-        return $this->fileDataPropertyName ? $this->fileDataPropertyName : $this->fileUploadPropertyName;
+        return $this->fileDataPropertyName ?: $this->fileUploadPropertyName;
     }
 
-    /**
-     * Sets the file data property name.
-     *
-     * @param $fileNameProperty The file name property.
-     */
-    public function setFileDataPropertyName ($fileDataPropertyName)
+    public function setFileDataPropertyName(string $fileDataPropertyName): void
     {
         $this->fileDataPropertyName = $fileDataPropertyName;
     }

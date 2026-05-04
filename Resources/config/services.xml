@@ -44,11 +44,9 @@
             <argument>%iphp.filestore.mappings%</argument>
         </service>
 
-        <!-- reading annotations from entity class file -->
+        <!-- reading uploadable attributes from entity class -->
         <service id="iphp.filestore.annotation.driver" class="Iphp\FileStoreBundle\Driver\AnnotationDriver"
-                 public="false">
-            <argument type="service" id="annotation_reader"/>
-        </service>
+                 public="false"/>
 
 
         <!-- storing file information (orm adapter), set in IphpFileStoreExtension -->
