@@ -1,22 +1,25 @@
 <?php
+
 namespace Iphp\FileStoreBundle\Tests\Functional;
 
-use Symfony\Component\Filesystem\Filesystem;
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Iphp\FileStoreBundle\IphpFileStoreBundle;
+use Iphp\FileStoreBundle\Tests\Functional\TestBundle\TestBundle;
+use Iphp\FileStoreBundle\Tests\Functional\TestXmlConfigBundle\TestXmlConfigBundle;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Kernel;
 
-/**
- * @author Vitiko <vitiko@mail.ru>
- */
 class AppKernel extends Kernel
 {
-    protected $config;
+    protected string $config;
 
-    protected $testEnv;
+    protected string $testEnv;
 
-    public function __construct($config, $testEnv = 'default')
+    public function __construct(string $config, string $testEnv = 'default')
     {
-        //separate generated container
         parent::__construct($testEnv . '_' . substr(md5($config), 0, 3), true);
 
         $fs = new Filesystem();
@@ -34,71 +37,73 @@ class AppKernel extends Kernel
 
     public function registerBundles(): iterable
     {
-        return array(
-            new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            new \Symfony\Bundle\TwigBundle\TwigBundle(),
-
-            new  \Iphp\FileStoreBundle\IphpFileStoreBundle(),
-            new  \Iphp\FileStoreBundle\Tests\Functional\TestBundle\TestBundle(),
-            new  \Iphp\FileStoreBundle\Tests\Functional\TestXmlConfigBundle\TestXmlConfigBundle()
-        );
+        return [
+            new FrameworkBundle(),
+            new DoctrineBundle(),
+            new TwigBundle(),
+            new IphpFileStoreBundle(),
+            new TestBundle(),
+            new TestXmlConfigBundle(),
+        ];
     }
 
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load($this->config);
     }
 
-    public function getCacheDir(): string
+    public function getProjectDir(): string
     {
-        return $this->getTestEnvDir() . '/app/cache/' . substr(md5($this->config), 0, 3) . '';
+        return dirname(__DIR__, 2);
     }
 
-    public function getConfig()
+    public function getCacheDir(): string
+    {
+        return $this->getTestEnvDir() . '/app/cache/' . substr(md5($this->config), 0, 3);
+    }
+
+    public function getBuildDir(): string
+    {
+        return $this->getCacheDir();
+    }
+
+    public function getLogDir(): string
+    {
+        return $this->getTestEnvDir() . '/app/logs';
+    }
+
+    public function getConfig(): string
     {
         return $this->config;
     }
 
-
-    public static function getTestBaseDir()
+    public static function getTestBaseDir(): string
     {
-      return sys_get_temp_dir() . '/IphpFileStoreTestBundle';
+        return sys_get_temp_dir() . '/IphpFileStoreTestBundle';
     }
 
-
-
-    public function getTestEnvDir()
+    public function getTestEnvDir(): string
     {
-        return self::getTestBaseDir().'/'. $this->testEnv;
+        return self::getTestBaseDir() . '/' . $this->testEnv;
     }
 
-
-    public function makeTestEnvDir()
+    public function makeTestEnvDir(): void
     {
         $fs = new Filesystem();
         $fs->remove($this->getTestEnvDir());
         $fs->mkdir($this->getTestEnvDir());
     }
 
-
     protected function getKernelParameters(): array
     {
-
-
-        return array_merge(
-            parent::getKernelParameters(), array(
-                'kernel.test_env' => $this->testEnv,
-                'kernel.test_env_dir' => $this->getTestEnvDir(),
-
-            )
-        );
+        return array_merge(parent::getKernelParameters(), [
+            'kernel.test_env' => $this->testEnv,
+            'kernel.test_env_dir' => $this->getTestEnvDir(),
+        ]);
     }
 
-    public function getTestEnv()
+    public function getTestEnv(): string
     {
         return $this->testEnv;
     }
-
-
 }

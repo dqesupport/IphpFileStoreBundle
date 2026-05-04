@@ -1,8 +1,9 @@
 <?php
 namespace Iphp\FileStoreBundle\Tests\Functional;
 
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * @author Vitiko <vitiko@mail.ru>
@@ -12,10 +13,11 @@ class BaseTestCase extends WebTestCase
     protected $testCaseUniqId;
 
 
-    static protected function createKernel(array $options = array())
+    protected static function createKernel(array $options = []): KernelInterface
     {
         return self::$kernel = new AppKernel(
-            isset($options['config']) ? $options['config'] : 'default.yml', static::getTestEnvFromCalledClass()
+            $options['config'] ?? 'default.yml',
+            static::getTestEnvFromCalledClass(),
         );
     }
 

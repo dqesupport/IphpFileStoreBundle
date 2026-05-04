@@ -54,7 +54,7 @@ class FileDataTransformer implements DataTransformerInterface
     }
 
 
-    public function transform($fileDataFromDb)
+    public function transform(mixed $fileDataFromDb): mixed
     {
         return $fileDataFromDb;
     }
@@ -65,7 +65,7 @@ class FileDataTransformer implements DataTransformerInterface
      * @param $fileDataFromForm
      * @return int
      */
-    public function reverseTransform($fileDataFromForm)
+    public function reverseTransform(mixed $fileDataFromForm): mixed
     {
         //if file field != file upload field - no need to store 'delete' in serialized file data
         if (isset($fileDataFromForm['delete']) && !$fileDataFromForm['delete'])

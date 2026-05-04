@@ -9,6 +9,6 @@
         </id>
         <field name="title" type="string" column="title" length="255"/>
         <field name="date" type="datetime" column="date"/>
-        <field name="file" type="array" column="file"/>
+        <field name="file" type="json" column="file" nullable="true"/>
     </entity>
 </doctrine-mapping>

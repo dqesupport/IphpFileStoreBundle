@@ -24,11 +24,11 @@
 
 
         <!-- upload file namer -->
-        <service id="iphp.filestore.namer.default" class="%iphp.filestore.namer.default.class%"/>
+        <service id="iphp.filestore.namer.default" class="%iphp.filestore.namer.default.class%" public="true"/>
 
 
         <!-- upload file directory namer -->
-        <service id="iphp.filestore.directory_namer.default" class="%iphp.filestore.directory_namer.default.class%"/>
+        <service id="iphp.filestore.directory_namer.default" class="%iphp.filestore.directory_namer.default.class%" public="true"/>
 
         <!--  namer  invoker-->
         <service id="iphp.filestore.namer.invoker" class="%iphp.filestore.namer.invoker.class%"

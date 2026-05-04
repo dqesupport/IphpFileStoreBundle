@@ -8,16 +8,23 @@ imports:
 iphp_file_store:
     mappings:
        file:
-           upload_dir:  %kernel.test_env_dir%/web/other/uploads
+           upload_dir:  '%kernel.test_env_dir%/web/other/uploads'
            upload_path: /other/uploads
 
-           #directory naming by id property
            directory_namer:
                property: ~
 
-           #file naming by translited title property
            namer:
                property:
                   params: { field: title}
-               translit:
+               translit: ~
 
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Iphp\FileStoreBundle\Tests\Functional\TestBundle\Controller\DefaultController:
+        public: true
+        tags: ['controller.service_arguments']

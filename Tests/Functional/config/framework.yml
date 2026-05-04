@@ -1,12 +1,15 @@
 framework:
     secret: test
-    test: ~
+    test: true
+    http_method_override: false
     session:
-        storage_id: session.storage.mock_file
-    form:            true
-    csrf_protection: true
-    validation:
-        enabled: true
-        enable_annotations: true
+        storage_factory_id: session.storage.factory.mock_file
+    form: true
+    property_access: true
+    csrf_protection: false
+    validation: ~
     router:
-        resource: "%kernel.root_dir%/config/routing.yml"
+        resource: '%kernel.project_dir%/Tests/Functional/config/routing.yml'
+        utf8: true
+    php_errors:
+        log: true

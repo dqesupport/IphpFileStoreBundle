@@ -1,10 +1,14 @@
-
-
 doctrine:
     orm:
-        auto_generate_proxy_classes: "%kernel.debug%"
+        auto_generate_proxy_classes: '%kernel.debug%'
         entity_managers:
             default:
-                auto_mapping: true
-services:
-    em: "@doctrine.orm.entity_manager"
+                mappings:
+                    TestBundle:
+                        type: attribute
+                        dir: 'Entity'
+                        prefix: 'Iphp\FileStoreBundle\Tests\Functional\TestBundle\Entity'
+                    TestXmlConfigBundle:
+                        type: xml
+                        dir: 'Resources/config/doctrine'
+                        prefix: 'Iphp\FileStoreBundle\Tests\Functional\TestXmlConfigBundle\Entity'

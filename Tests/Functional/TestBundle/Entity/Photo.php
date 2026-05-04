@@ -2,153 +2,95 @@
 
 namespace Iphp\FileStoreBundle\Tests\Functional\TestBundle\Entity;
 
-use Iphp\FileStoreBundle\Mapping\Annotation as FileStore;
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Iphp\FileStoreBundle\Mapping\Annotation\Uploadable;
+use Iphp\FileStoreBundle\Mapping\Annotation\UploadableField;
+use Symfony\Component\Validator\Constraints as Assert;
 
-
-
-/**
- * @ORM\Entity
- * @ORM\Table(name = "photo")
- * @FileStore\Uploadable
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'photo')]
+#[Uploadable]
 class Photo
 {
-    /**
-     * @var integer
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\Column(type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string")
-     * @var string
-     */
-    private $title;
+    #[ORM\Column(type: Types::STRING)]
+    private ?string $title = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTime $date = null;
 
-    /**
-     * @var \Datetime
-     * @ORM\Column(type="datetime")
-     */
-    private $date;
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    #[Assert\Image(maxSize: '20M')]
+    #[UploadableField(mapping: 'photo')]
+    private $photo = null;
 
-    /**
-     * @ORM\Column(type="array")
-     * @Assert\Image( maxSize="20M")
-     * @FileStore\UploadableField(mapping="photo")
-     **/
-    private $photo;
+    #[Assert\Image(maxSize: '20M')]
+    #[UploadableField(mapping: 'photo', fileDataProperty: 'photoInfo')]
+    private $photoUpload = null;
 
-    /**
-     * Only for upload
-     * @Assert\Image( maxSize="20M")
-     * @FileStore\UploadableField(mapping="photo", fileDataProperty="photoInfo")
-     **/
-    private $photoUpload;
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private $photoInfo = null;
 
-
-    /**
-     * Only for store file info in db
-     * @ORM\Column(type="array")
-     **/
-    private $photoInfo;
-
-    /**
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param string $title
-     * @return Photo
-     */
-    public function setTitle($title)
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * @param array $photo
-     * @return Photo
-     */
-    public function setPhoto($photo)
+    public function setPhoto($photo): self
     {
         $this->photo = $photo;
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getPhoto()
     {
         return $this->photo;
     }
 
-    /**
-     * @param \Datetime $date
-     */
-    public function setDate($date)
+    public function setDate(?\DateTime $date): self
     {
         $this->date = $date;
         return $this;
     }
 
-    /**
-     * @return \Datetime
-     */
-    public function getDate()
+    public function getDate(): ?\DateTime
     {
         return $this->date;
     }
 
-    /**
-     * @return mixed
-     */
     public function getPhotoUpload()
     {
         return $this->photoUpload;
     }
 
-    /**
-     * @param mixed $photoUpload
-     */
-    public function setPhotoUpload($photoUpload)
+    public function setPhotoUpload($photoUpload): void
     {
         $this->photoUpload = $photoUpload;
     }
 
-    /**
-     * @return mixed
-     */
     public function getPhotoInfo()
     {
         return $this->photoInfo;
     }
 
-    /**
-     * @param mixed $photoInfo
-     */
-    public function setPhotoInfo($photoInfo)
+    public function setPhotoInfo($photoInfo): void
     {
         $this->photoInfo = $photoInfo;
     }
-
-
 }

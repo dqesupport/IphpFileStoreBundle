@@ -1,7 +1,7 @@
 photo_index:
-    path:      /
-    defaults:  { _controller: TestBundle:Default:index }
+    path: /
+    controller: 'Iphp\FileStoreBundle\Tests\Functional\TestBundle\Controller\DefaultController::index'
 
 photo_edit:
-    path:      /edit/{id}/
-    defaults:  { _controller: TestBundle:Default:edit }
+    path: /edit/{id}/
+    controller: 'Iphp\FileStoreBundle\Tests\Functional\TestBundle\Controller\DefaultController::edit'

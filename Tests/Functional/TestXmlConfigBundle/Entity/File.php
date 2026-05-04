@@ -2,80 +2,37 @@
 
 namespace Iphp\FileStoreBundle\Tests\Functional\TestXmlConfigBundle\Entity;
 
-use Iphp\FileStoreBundle\Mapping\Annotation as FileStore;
-use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\ORM\Mapping as ORM;
-
-
-
-/**
- * @ORM\Entity
- * @ORM\Table(name = "file")
- */
 class File extends UploadableEntity
 {
-    /**
-     * @var integer
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string")
-     * @var string
-     */
-    private $title;
+    private ?string $title = null;
 
+    private ?\DateTime $date = null;
 
-    /**
-     * @var \Datetime
-     * @ORM\Column(type="datetime")
-     */
-    private $date;
-
-
-    /**
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param string $title
-     * @return Photo
-     */
-    public function setTitle($title)
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-
-    /**
-     * @param \Datetime $date
-     */
-    public function setDate($date)
+    public function setDate(?\DateTime $date): self
     {
         $this->date = $date;
         return $this;
     }
 
-    /**
-     * @return \Datetime
-     */
-    public function getDate()
+    public function getDate(): ?\DateTime
     {
         return $this->date;
     }

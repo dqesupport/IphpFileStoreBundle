@@ -2,26 +2,18 @@
 
 namespace Iphp\FileStoreBundle\Tests\Functional\TestXmlConfigBundle\Entity;
 
-use Iphp\FileStoreBundle\Mapping\Annotation as FileStore;
+use Iphp\FileStoreBundle\Mapping\Annotation\Uploadable;
+use Iphp\FileStoreBundle\Mapping\Annotation\UploadableField;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
-/**
- * @author Vitiko <vitiko@mail.ru>
- * @FileStore\Uploadable
- */
-
+#[Uploadable]
 abstract class UploadableEntity
 {
+    #[Assert\Image(maxSize: '20M')]
+    #[UploadableField(mapping: 'file')]
+    protected $file = null;
 
-
-    /**
-     * @Assert\Image( maxSize="20M")
-     * @FileStore\UploadableField(mapping="file")
-     **/
-    protected $file;
-
-    public function setFile($file)
+    public function setFile($file): self
     {
         $this->file = $file;
         return $this;

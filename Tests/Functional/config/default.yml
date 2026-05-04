@@ -8,7 +8,7 @@ imports:
 iphp_file_store:
     mappings:
        photo:
-           upload_dir:  %kernel.test_env_dir%/web/photo
+           upload_dir:  '%kernel.test_env_dir%/web/photo'
            upload_path: /photo
            directory_namer:
               date:
@@ -17,10 +17,9 @@ iphp_file_store:
 
 
        file:
-           upload_dir:  %kernel.test_env_dir%/web/file
+           upload_dir:  '%kernel.test_env_dir%/web/file'
            upload_path: /file
 
-           #chain of directory namers
            directory_namer:
                entityName: ~
                property:
@@ -28,6 +27,14 @@ iphp_file_store:
                date:
                    params: { field : date, depth : year }
            namer:
-               #naming file by id
                property: ~
 
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Iphp\FileStoreBundle\Tests\Functional\TestBundle\Controller\DefaultController:
+        public: true
+        tags: ['controller.service_arguments']

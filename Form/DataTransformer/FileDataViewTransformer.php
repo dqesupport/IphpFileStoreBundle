@@ -13,7 +13,7 @@ class FileDataViewTransformer implements DataTransformerInterface
 {
 
 
-        public function transform($fileDataFromDb)
+        public function transform(mixed $fileDataFromDb): mixed
         {
             return $fileDataFromDb;
         }
@@ -24,7 +24,7 @@ class FileDataViewTransformer implements DataTransformerInterface
          * @param $fileDataFromForm
          * @return int
          */
-        public function reverseTransform($fileDataFromForm)
+        public function reverseTransform(mixed $fileDataFromForm): mixed
         {
             return $fileDataFromForm;
         }
