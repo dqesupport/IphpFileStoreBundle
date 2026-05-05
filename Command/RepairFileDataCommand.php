@@ -4,6 +4,7 @@ namespace Iphp\FileStoreBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Iphp\FileStoreBundle\Mapping\PropertyMappingFactory;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -11,9 +12,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
+#[AsCommand(name: 'iphp:filestore:repair', description: 'Re-uploads files for existing entities to recover from rename/move drift')]
 class RepairFileDataCommand extends Command
 {
+    // PHP 7 fallback — the AsCommand attribute above is parsed as a `#` comment on PHP 7,
+    // so Symfony falls back to these static properties to discover the command name/description.
     protected static $defaultName = 'iphp:filestore:repair';
+    protected static $defaultDescription = 'Re-uploads files for existing entities to recover from rename/move drift';
 
     /** @var EntityManagerInterface */
     private $em;
@@ -43,8 +48,7 @@ class RepairFileDataCommand extends Command
 
     protected function configure()
     {
-        $this->setName('iphp:filestore:repair')
-            ->addOption('entity', null, InputOption::VALUE_REQUIRED, 'The entity class name (shortcut notation)')
+        $this->addOption('entity', null, InputOption::VALUE_REQUIRED, 'The entity class name (shortcut notation)')
             ->addOption('field', null, InputOption::VALUE_REQUIRED, 'The field with file data')
             ->addOption('maxresults', null, InputOption::VALUE_OPTIONAL, 'Max results limitation')
             ->addOption('webdir', null, InputOption::VALUE_OPTIONAL, 'Web dir for searching file')
