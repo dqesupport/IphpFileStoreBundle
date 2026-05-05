@@ -164,6 +164,9 @@ class UploaderListener implements EventSubscriber
     {
         //All mappings from updated object
         $mappings = $this->getMappingsFromArgs($args);
+        if (!$mappings) {
+            return;
+        }
 
         foreach ($mappings as $mapping) {
             if ($mapping->isUseOneProperty()) $this->updateUseOneProperties($args, $mapping);
