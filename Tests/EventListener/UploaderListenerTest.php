@@ -72,6 +72,20 @@ class UploaderListenerTest extends \PHPUnit\Framework\TestCase
         return new UploaderListener($this->dataStorage, $this->fileStorage, $this->propertyMappingfactory);
     }
 
+    /**
+     * Test the getSubscribedEvents method.
+     */
+    public function testGetSubscribedEvents()
+    {
+        $events = $this->getUploaderListener()->getSubscribedEvents();
+
+        $this->assertTrue(in_array('prePersist', $events));
+        $this->assertTrue(in_array('postFlush', $events));
+        $this->assertTrue(in_array('preUpdate', $events));
+        $this->assertTrue(in_array('postRemove', $events));
+    }
+
+
     protected function setDataStorageObjectMapping($obj, $propertyMapping)
     {
         $class = new \ReflectionClass($obj);

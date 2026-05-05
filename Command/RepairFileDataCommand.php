@@ -3,56 +3,124 @@
 namespace Iphp\FileStoreBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Iphp\FileStoreBundle\Mapping\PropertyMapping;
 use Iphp\FileStoreBundle\Mapping\PropertyMappingFactory;
-use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-#[AsCommand(
-    name: 'iphp:filestore:repair',
-    description: 'Re-uploads files for existing entities to recover from rename/move drift',
-)]
+
 class RepairFileDataCommand extends Command
 {
+    protected static $defaultName = 'iphp:filestore:repair';
+
+    /** @var EntityManagerInterface */
+    private $em;
+
+    /** @var PropertyMappingFactory */
+    private $mappingFactory;
+
+    /** @var string */
+    private $projectDir;
+
+    /** @var string|null */
+    private $iphpWebDir;
+
     public function __construct(
-        private readonly EntityManagerInterface $em,
-        private readonly PropertyMappingFactory $mappingFactory,
-        private readonly string $projectDir,
+        EntityManagerInterface $em,
+        PropertyMappingFactory $mappingFactory,
+        string $projectDir,
+        string $iphpWebDir = null
     ) {
+        $this->em = $em;
+        $this->mappingFactory = $mappingFactory;
+        $this->projectDir = $projectDir;
+        $this->iphpWebDir = $iphpWebDir;
         parent::__construct();
     }
 
-    protected function configure(): void
+
+    protected function configure()
     {
-        $this
-            ->addOption('entity', null, InputOption::VALUE_REQUIRED, 'The entity class name')
+        $this->setName('iphp:filestore:repair')
+            ->addOption('entity', null, InputOption::VALUE_REQUIRED, 'The entity class name (shortcut notation)')
             ->addOption('field', null, InputOption::VALUE_REQUIRED, 'The field with file data')
             ->addOption('maxresults', null, InputOption::VALUE_OPTIONAL, 'Max results limitation')
             ->addOption('webdir', null, InputOption::VALUE_OPTIONAL, 'Web dir for searching file')
             ->addOption('force', null, InputOption::VALUE_OPTIONAL, 'Force reupload and rename files');
+
+    }
+
+
+    protected function getPropertyMappingFactory()
+    {
+        return $this->mappingFactory;
+    }
+
+
+    protected function getWebDir(InputInterface $input)
+    {
+        $webDir = $input->getOption('webdir');
+
+        if (!$webDir && $this->iphpWebDir) $webDir = $this->iphpWebDir;
+
+        if (!$webDir) $webDir = str_replace('\\', '/', realpath($this->projectDir . '/public'));
+
+        if (!$webDir) throw new \InvalidArgumentException ('
+         For resolving IphpFileStoreBundle uploaded files need to set --webdir option');
+
+        return $webDir;
+    }
+
+
+    function getMaxResults(InputInterface $input)
+    {
+        $maxResults = $input->getOption('maxresults');
+        if (!$maxResults || !is_numeric($maxResults)) $maxResults = 1000;
+
+        return $maxResults;
+    }
+
+
+    function getEntityManager()
+    {
+        return $this->em;
+    }
+
+    function getMappingFromField($entity, $field)
+    {
+        return $this->getPropertyMappingFactory()->getMappingFromField($entity, new \ReflectionClass($entity), $field);
+    }
+
+
+    function  getRepository($entityFullName)
+    {
+        return $this->getEntityManager()->getRepository($entityFullName);
+    }
+
+    function getEntityIds($entityFullName, $maxResults)
+    {
+        return $this->getEntityManager()->createQuery(
+            "SELECT e.id FROM " . $entityFullName . " e ORDER BY e.id ASC"
+        )->setMaxResults($maxResults)->getArrayResult();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $entityFullName = $input->getOption('entity');
         $field = $input->getOption('field');
-        $force = (bool) $input->getOption('force');
+        $force = $input->getOption('force') ? true : false;
         $webDir = $this->getWebDir($input);
-        $maxResults = $this->getMaxResults($input);
 
-        $repository = $this->em->getRepository($entityFullName);
 
-        foreach ($this->getEntityIds($entityFullName, $maxResults) as $pos => $row) {
-            $entity = $repository->find($row['id']);
+        foreach ($this->getEntityIds($entityFullName, $this->getMaxResults($input)) as $pos => $e) {
+
+            $toFlush = false;
+            $entity = $this->getRepository($entityFullName)->findOneById($e['id']);
             $fileData = $entity->{'get' . ucfirst($field)}();
 
-            if (!$fileData) {
-                continue;
-            }
+            if (!$fileData) continue;
 
             $fileNameByWebPath = $webDir . $fileData['path'];
             $fileNameByWebPathExists = file_exists($fileNameByWebPath);
@@ -65,64 +133,23 @@ class RepairFileDataCommand extends Command
                 continue;
             }
 
-            if ($fileNameByWebPathExists && $resolvedFileNameExists && !$force) {
-                continue;
-            }
+            if ($fileNameByWebPathExists && $resolvedFileNameExists && !$force) continue;
 
-            $file = new UploadedFile(
-                $fileNameByWebPathExists ? $fileNameByWebPath : $resolvedFileNameExists,
-                $fileData['originalName'],
-                $fileData['mimeType'],
-                null,
-                true,
-            );
+            //uploadedFile because need to move to new destination (not copy)
+            $file = new UploadedFile ($fileNameByWebPathExists ? $fileNameByWebPath : $resolvedFileNameExists,
+                $fileData['originalName'], $fileData['mimeType'], null, true);
 
-            $entity->{'set' . ucfirst($field)}($file);
+            $entity->{'set' . ucfirst($field)} ($file);
 
-            $this->em->persist($entity);
+            $this->getEntityManager()->persist($entity);
 
-            if ($pos % 20 === 0) {
-                $this->em->flush();
-            }
-            if ($pos % 100 === 0) {
-                $this->em->clear();
-            }
+            $toFlush = true;
+            if ($pos % 20 == 0 && $toFlush) $this->getEntityManager()->flush();
+            if ($pos % 100 == 0) $this->getEntityManager()->clear();
         }
 
-        $this->em->flush();
+        $this->getEntityManager()->flush();
 
         return Command::SUCCESS;
-    }
-
-    private function getWebDir(InputInterface $input): string
-    {
-        $webDir = $input->getOption('webdir');
-        if ($webDir) {
-            return $webDir;
-        }
-
-        return str_replace('\\', '/', $this->projectDir . '/public');
-    }
-
-    private function getMaxResults(InputInterface $input): int
-    {
-        $maxResults = $input->getOption('maxresults');
-        if (!$maxResults || !is_numeric($maxResults)) {
-            return 1000;
-        }
-
-        return (int) $maxResults;
-    }
-
-    private function getMappingFromField(object $entity, string $field): ?PropertyMapping
-    {
-        return $this->mappingFactory->getMappingFromField($entity, new \ReflectionClass($entity), $field);
-    }
-
-    private function getEntityIds(string $entityFullName, int $maxResults): array
-    {
-        return $this->em->createQuery(
-            'SELECT e.id FROM ' . $entityFullName . ' e ORDER BY e.id ASC'
-        )->setMaxResults($maxResults)->getArrayResult();
     }
 }

@@ -3,6 +3,7 @@
 namespace Iphp\FileStoreBundle\EventListener;
 
 
+use Doctrine\Common\EventSubscriber;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\Common\EventArgs;
 
@@ -20,8 +21,20 @@ use Symfony\Component\HttpFoundation\File\File;
  *
  * @author Vitiko <vitiko@mail.ru>
  */
-class UploaderListener
+class UploaderListener implements EventSubscriber
 {
+    public function getSubscribedEvents()
+    {
+        return array(
+            'prePersist',
+            'postFlush',
+            'preUpdate',
+            'postRemove',
+        );
+    }
+
+
+
     /**
      * Adapter for ORMor MongoDb
      * @var \Iphp\FileStoreBundle\DataStorage\DataStorageInterface $dataStorage
