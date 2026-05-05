@@ -23,18 +23,6 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class UploaderListener implements EventSubscriber
 {
-    public function getSubscribedEvents()
-    {
-        return array(
-            'prePersist',
-            'postFlush',
-            'preUpdate',
-            'postRemove',
-        );
-    }
-
-
-
     /**
      * Adapter for ORMor MongoDb
      * @var \Iphp\FileStoreBundle\DataStorage\DataStorageInterface $dataStorage
@@ -94,6 +82,22 @@ class UploaderListener implements EventSubscriber
     public function getDeferredObjectNum()
     {
         return count($this->deferredFiles);
+    }
+
+
+    /**
+     * The events the listener is subscribed to.
+     *
+     * @return array The array of events.
+     */
+    public function getSubscribedEvents()
+    {
+        return array(
+            'prePersist',
+            'postFlush',
+            'preUpdate',
+            'postRemove',
+        );
     }
 
 

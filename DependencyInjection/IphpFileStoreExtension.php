@@ -3,28 +3,20 @@
 namespace Iphp\FileStoreBundle\DependencyInjection;
 
 use Iphp\FileStoreBundle\DataStorage\OrmDataStorage;
+use Iphp\FileStoreBundle\EventListener\UploaderListener;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\HttpKernel\Kernel;
 
 class IphpFileStoreExtension extends Extension implements PrependExtensionInterface
 {
-    /**
-     * Per-driver mapping of (a) doctrine bridge tag to apply on the listener and
-     * (b) events to register it for. Modern symfony/doctrine-bridge only processes
-     * the `doctrine.event_listener` tag (the legacy `doctrine.event_subscriber`
-     * tag is no longer effective), so each event is tagged explicitly.
-     *
-     * @var array<string, array{tag: string, events: list<string>}>
-     */
+    /** @var array<string, string> */
     protected $tagMap = [
-        'orm' => [
-            'tag' => 'doctrine.event_listener',
-            'events' => ['prePersist', 'postFlush', 'preUpdate', 'postRemove'],
-        ],
-        // 'document' => ['tag' => '...', 'events' => [...]]
+        'orm' => 'doctrine.event_subscriber',
+        // 'document' => ''
     ];
 
     /** @var array<string, string> */
@@ -57,8 +49,18 @@ class IphpFileStoreExtension extends Extension implements PrependExtensionInterf
         }
 
         $listenerDef = $container->getDefinition('iphp.filestore.event_listener.uploader');
-        foreach ($this->tagMap[$driver]['events'] as $event) {
-            $listenerDef->addTag($this->tagMap[$driver]['tag'], ['event' => $event]);
+
+        if (Kernel::VERSION_ID < 70000) {
+            // Symfony 5/6: tag exactly as in the legacy symfony5 branch — single
+            // doctrine.event_subscriber tag, doctrine reads getSubscribedEvents() itself.
+            $listenerDef->addTag($this->tagMap[$driver]);
+        } else {
+            // Symfony 7+ removed event_subscriber handling from RegisterEventListenersAndSubscribersPass;
+            // fall back to one doctrine.event_listener tag per event (events from getSubscribedEvents()).
+            $listenerStub = (new \ReflectionClass(UploaderListener::class))->newInstanceWithoutConstructor();
+            foreach ($listenerStub->getSubscribedEvents() as $event) {
+                $listenerDef->addTag('doctrine.event_listener', ['event' => $event]);
+            }
         }
     }
 

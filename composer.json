@@ -13,7 +13,7 @@
     ],
 
     "require": {
-        "php": "^8.2",
+        "php": "^7.4 || ^8.0",
         "symfony/framework-bundle": "^5.4 || ^6.4 || ^7.0"
     },
 
