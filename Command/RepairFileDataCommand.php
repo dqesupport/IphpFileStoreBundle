@@ -46,7 +46,7 @@ class RepairFileDataCommand extends Command
     }
 
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->addOption('entity', null, InputOption::VALUE_REQUIRED, 'The entity class name (shortcut notation)')
             ->addOption('field', null, InputOption::VALUE_REQUIRED, 'The field with file data')
