@@ -20,7 +20,7 @@ class OrmDataStorage implements DataStorageInterface
      */
     public function getObjectFromArgs(EventArgs $e)
     {
-        return $e->getEntity();
+        return $e->getObject();
     }
 
     /**
