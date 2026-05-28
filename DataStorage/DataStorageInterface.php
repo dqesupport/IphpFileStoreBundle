@@ -2,8 +2,8 @@
 
 namespace Iphp\FileStoreBundle\DataStorage;
 
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Common\EventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 
 /**
  * DataStorageInterface.
@@ -15,7 +15,7 @@ interface DataStorageInterface
     /**
      * Gets the mapped object from the event arguments.
      *
-     * @param  \Doctrine\Common\Persistence\Event\LifecycleEventArgs $e The event arguments.
+     * @param  \Doctrine\Persistence\Event\LifecycleEventArgs $e The event arguments.
      * @return object    The mapped object.
      */
     public function getObjectFromArgs(EventArgs $e);
@@ -23,7 +23,7 @@ interface DataStorageInterface
     /**
      * Recomputes the change set for the object.
      *
-     * @param \Doctrine\Common\Persistence\Event\LifecycleEventArgs $e The event arguments.
+     * @param \Doctrine\Persistence\Event\LifecycleEventArgs $e The event arguments.
      */
     public function recomputeChangeSet(EventArgs $e);
 

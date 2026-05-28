@@ -121,7 +121,7 @@ class RepairFileDataCommand extends Command
         foreach ($this->getEntityIds($entityFullName, $this->getMaxResults($input)) as $pos => $e) {
 
             $toFlush = false;
-            $entity = $this->getRepository($entityFullName)->findOneById($e['id']);
+            $entity = $this->getRepository($entityFullName)->find($e['id']);
             $fileData = $entity->{'get' . ucfirst($field)}();
 
             if (!$fileData) continue;

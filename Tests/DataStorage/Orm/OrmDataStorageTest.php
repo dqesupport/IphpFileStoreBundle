@@ -18,17 +18,17 @@ class OrmDataStorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetObjectFromArgs()
     {
-        if (!class_exists('Doctrine\ORM\Event\LifecycleEventArgs')) {
-            $this->markTestSkipped('Doctrine\ORM\Event\LifecycleEventArgs does not exist.');
+        if (!class_exists('Doctrine\Persistence\Event\LifecycleEventArgs')) {
+            $this->markTestSkipped('Doctrine\Persistence\Event\LifecycleEventArgs does not exist.');
         } else {
             $entity = $this->createMock('Iphp\FileStoreBundle\Tests\DummyEntity');
 
-            $args = $this->getMockBuilder('Doctrine\ORM\Event\LifecycleEventArgs')
+            $args = $this->getMockBuilder('Doctrine\Persistence\Event\LifecycleEventArgs')
                 ->disableOriginalConstructor()
                 ->getMock();
             $args
                 ->expects($this->once())
-                ->method('getEntity')
+                ->method('getObject')
                 ->will($this->returnValue($entity));
 
             $storage = new OrmDataStorage();
@@ -42,8 +42,8 @@ class OrmDataStorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetReflectionClass()
     {
-        if (!interface_exists('Doctrine\ORM\Proxy\Proxy')) {
-            $this->markTestSkipped('Doctrine\ORM\Proxy\Proxy does not exist.');
+        if (!interface_exists('Doctrine\Persistence\Proxy')) {
+            $this->markTestSkipped('Doctrine\Persistence\Proxy does not exist.');
         } else {
             $obj = new DummyEntity();
             $adapter = new OrmDataStorage();
@@ -58,8 +58,8 @@ class OrmDataStorageTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetReflectionClassProxy()
     {
-        if (!interface_exists('Doctrine\ORM\Proxy\Proxy')) {
-            $this->markTestSkipped('Doctrine\ORM\Proxy\Proxy does not exist.');
+        if (!interface_exists('Doctrine\Persistence\Proxy')) {
+            $this->markTestSkipped('Doctrine\Persistence\Proxy does not exist.');
         } else {
             $obj = new DummyEntityProxyORM();
             $adapter = new OrmDataStorage();
@@ -74,17 +74,17 @@ class OrmDataStorageTest extends \PHPUnit\Framework\TestCase
     {
 
 
-        if (!class_exists('Doctrine\ORM\Event\LifecycleEventArgs')) {
-            $this->markTestSkipped('Doctrine\ORM\Event\LifecycleEventArgs does not exist.');
+        if (!class_exists('Doctrine\Persistence\Event\LifecycleEventArgs')) {
+            $this->markTestSkipped('Doctrine\Persistence\Event\LifecycleEventArgs does not exist.');
         } else {
             $entity = $this->createMock('Iphp\FileStoreBundle\Tests\DummyEntity');
 
-            $args = $this->getMockBuilder('Doctrine\ORM\Event\LifecycleEventArgs')
+            $args = $this->getMockBuilder('Doctrine\Persistence\Event\LifecycleEventArgs')
                 ->disableOriginalConstructor()
                 ->getMock();
             $args
                 ->expects($this->once())
-                ->method('getEntity')
+                ->method('getObject')
                 ->will($this->returnValue($entity));
 
 
@@ -94,7 +94,7 @@ class OrmDataStorageTest extends \PHPUnit\Framework\TestCase
 
 
             $args->expects($this->once())
-                ->method('getEntityManager')
+                ->method('getObjectManager')
                 ->will($this->returnValue($em));
 
 
@@ -129,12 +129,12 @@ class OrmDataStorageTest extends \PHPUnit\Framework\TestCase
 
     function testPostFlush()
     {
-        if (!class_exists('Doctrine\ORM\Event\LifecycleEventArgs')) {
-            $this->markTestSkipped('Doctrine\ORM\Event\LifecycleEventArgs does not exist.');
+        if (!class_exists('Doctrine\Persistence\Event\LifecycleEventArgs')) {
+            $this->markTestSkipped('Doctrine\Persistence\Event\LifecycleEventArgs does not exist.');
         } else {
             $entity = $this->createMock('Iphp\FileStoreBundle\Tests\DummyEntity');
 
-            $args = $this->getMockBuilder('Doctrine\ORM\Event\LifecycleEventArgs')
+            $args = $this->getMockBuilder('Doctrine\Persistence\Event\LifecycleEventArgs')
                 ->disableOriginalConstructor()
                 ->getMock();
 
@@ -145,7 +145,7 @@ class OrmDataStorageTest extends \PHPUnit\Framework\TestCase
 
 
             $args->expects($this->any())
-                ->method('getEntityManager')
+                ->method('getObjectManager')
                 ->will($this->returnValue($em));
 
 
@@ -162,7 +162,7 @@ class OrmDataStorageTest extends \PHPUnit\Framework\TestCase
     public function testCurrentFieldData()
     {
 
-        if (!class_exists('Doctrine\ORM\Event\LifecycleEventArgs')) {
+        if (!class_exists('Doctrine\ORM\Event\PreUpdateEventArgs')) {
             $this->markTestSkipped('Doctrine\ORM\Event\PreUpdateEventArgs does not exist.');
         } else {
             $entity = $this->createMock('Iphp\FileStoreBundle\Tests\DummyEntity');

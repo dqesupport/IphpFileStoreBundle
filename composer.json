@@ -28,7 +28,7 @@
         "symfony/yaml": "^5.4 || ^6.4 || ^7.0",
         "symfony/mime": "^5.4 || ^6.4 || ^7.0",
         "doctrine/doctrine-bundle": "^2.7",
-        "doctrine/orm": "^2.14",
+        "doctrine/orm": "^2.14 || ^3.0",
         "mikey179/vfsstream": "^1.6.11",
         "phpunit/phpunit": "^9.6 || ^10.5"
     },

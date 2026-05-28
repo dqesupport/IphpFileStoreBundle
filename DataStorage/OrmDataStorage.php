@@ -3,10 +3,8 @@
 namespace Iphp\FileStoreBundle\DataStorage;
 
 use Iphp\FileStoreBundle\DataStorage\DataStorageInterface;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\Common\EventArgs;
-
-use Doctrine\ORM\Proxy\Proxy;
+use Doctrine\Persistence\Proxy;
 
 /**
  * Orm Data Storage
@@ -33,7 +31,7 @@ class OrmDataStorage implements DataStorageInterface
         /**
          * var \Doctrine\ORM\EntityManager
          */
-        $em = $e->getEntityManager();
+        $em = $e->getObjectManager();
 
         $uow = $em->getUnitOfWork();
         $metadata = $em->getClassMetadata(get_class($obj));
@@ -58,8 +56,8 @@ class OrmDataStorage implements DataStorageInterface
      */
     public function postFlush($obj, EventArgs $args)
     {
-        $args->getEntityManager()->persist($obj);
-        $args->getEntityManager()->flush();
+        $args->getObjectManager()->persist($obj);
+        $args->getObjectManager()->flush();
     }
 
 
