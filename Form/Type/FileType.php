@@ -50,6 +50,10 @@ class FileType extends AbstractType
         $this->fileStorage = $fileStorage;
     }
 
+    /**
+     * {@inheritdoc}
+     * @return void
+     */
     public function configureOptions (OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
@@ -73,6 +77,7 @@ class FileType extends AbstractType
 
     /**
      * {@inheritdoc}
+     * @return void
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -97,12 +102,20 @@ class FileType extends AbstractType
     }
 
     //for using iphp_file_widget from Resources/views/Form/fields.html.twig
+    /**
+     * {@inheritdoc}
+     * @return string
+     */
     public function getBlockPrefix()
     {
         return 'iphp_file';
     }
 
 
+    /**
+     * {@inheritdoc}
+     * @return void
+     */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['upload'] = $options['upload'];
